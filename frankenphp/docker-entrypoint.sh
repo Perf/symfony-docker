@@ -15,6 +15,13 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 
 		composer require "php:>=$PHP_VERSION" runtime/frankenphp-symfony
 		composer config --json extra.symfony.docker 'true'
+		composer config --json extra.symfony.allow-contrib 'true'
+		composer config --json allow-plugins.pestphp/pest-plugin 'true'
+		composer require api log messenger symfony/uid symfonycasts/micro-mapper nesbot/carbon
+		composer require --dev --with-all-dependencies \
+			maker:* profiler:* debug:* orm-fixtures:* foundry:* symfony/browser-kit:* symfony/http-client:* symfony/mailer:* \
+			mockery/mockery:* nunomaduro/mock-final-classes:* symplify/config-transformer:* tomasvotruba/symfony-config-generator:* rector/rector:* \
+			pestphp/pest:* pestphp/pest-plugin-type-coverage:* pestphp/pest-plugin-faker:*
 
 		if grep -q ^DATABASE_URL= .env; then
 			echo 'To finish the installation please press Ctrl+C to stop Docker Compose and run: docker compose up --build -d --wait'
