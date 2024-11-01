@@ -17,9 +17,9 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		composer config --json extra.symfony.docker 'true'
 		composer config --json extra.symfony.allow-contrib 'true'
 		composer config --json allow-plugins.pestphp/pest-plugin 'true'
-		composer require api log messenger symfony/uid symfonycasts/micro-mapper nesbot/carbon
+		composer require api log messenger symfony/mailer symfony/uid symfonycasts/micro-mapper nesbot/carbon
 		composer require --dev --with-all-dependencies \
-			maker:* profiler:* debug:* orm-fixtures:* foundry:* symfony/browser-kit:* symfony/http-client:* symfony/mailer:* \
+			maker:* profiler:* debug:* orm-fixtures:* foundry:* symfony/browser-kit:* symfony/http-client:* \
 			mockery/mockery:* nunomaduro/mock-final-classes:* symplify/config-transformer:* tomasvotruba/symfony-config-generator:* rector/rector:* \
 			pestphp/pest:* pestphp/pest-plugin-type-coverage:* pestphp/pest-plugin-faker:*
 
