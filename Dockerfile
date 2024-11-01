@@ -75,7 +75,7 @@ ARG HOST_USER
 RUN if [ "${HOST_USER}" ]; then \
 		addgroup --gid ${HOST_GID} ${HOST_USER} && \
 		adduser --uid ${HOST_UID} --gid ${HOST_GID} --home /home/${HOST_USER} --shell /bin/bash ${HOST_USER}; \
-		echo -e '\neval "$(/app/bin/console completion bash)"\n' >> /home/${HOST_USER}/.bashrc \
+		echo -e '\neval "$(/app/bin/console completion bash)"\n' >> /home/${HOST_USER}/.bashrc; \
 	fi
 
 # Prod FrankenPHP image
