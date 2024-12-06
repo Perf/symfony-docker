@@ -24,7 +24,7 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 			pestphp/pest:* pestphp/pest-plugin-type-coverage:* pestphp/pest-plugin-faker:*
 
 		if grep -q ^DATABASE_URL= .env; then
-			echo "To finish the installation please press Ctrl+C to stop Docker Compose and run: docker compose up --build -d --wait"
+			echo 'To finish the installation please press Ctrl+C to stop Docker Compose and run: docker compose up --build -d --wait'
 			sleep infinity
 		fi
 	fi
@@ -34,7 +34,7 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	fi
 
 	if grep -q ^DATABASE_URL= .env; then
-		echo "Waiting for database to be ready..."
+		echo 'Waiting for database to be ready...'
 		ATTEMPTS_LEFT_TO_REACH_DATABASE=60
 		until [ $ATTEMPTS_LEFT_TO_REACH_DATABASE -eq 0 ] || DATABASE_ERROR=$(php bin/console dbal:run-sql -q "SELECT 1" 2>&1); do
 			if [ $? -eq 255 ]; then
@@ -48,11 +48,11 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		done
 
 		if [ $ATTEMPTS_LEFT_TO_REACH_DATABASE -eq 0 ]; then
-			echo "The database is not up or not reachable:"
+			echo 'The database is not up or not reachable:'
 			echo "$DATABASE_ERROR"
 			exit 1
 		else
-			echo "The database is now ready and reachable"
+			echo 'The database is now ready and reachable'
 		fi
 
 		if [ "$( find ./migrations -iname '*.php' -print -quit )" ]; then
@@ -62,6 +62,8 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
 	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var
+
+	echo 'PHP app ready!'
 fi
 
 exec docker-php-entrypoint "$@"
