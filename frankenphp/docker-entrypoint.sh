@@ -13,14 +13,17 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		cd -
 		rm -Rf tmp/
 
-		composer require "php:>=$PHP_VERSION" runtime/frankenphp-symfony
+		composer require "php:>=$PHP_VERSION" runtime/frankenphp-symfony \
+			ext-ev ext-json ext-pcntl ext-raphf ext-spl
+		composer config --json extra.symfony.allow-risky true
 		composer config --json extra.symfony.docker 'true'
 		composer config --json extra.symfony.allow-contrib 'true'
 		composer config --json allow-plugins.pestphp/pest-plugin 'true'
-		composer require api log messenger symfony/mailer symfony/uid symfonycasts/micro-mapper nesbot/carbon
+		composer require symfony/flex api log messenger symfony/mailer symfony/uid symfonycasts/micro-mapper nesbot/carbon \
+			amphp/amphp amphp/http-client amphp/log amphp/parallel amphp/postgres revolt/event-loop
 		composer require --dev --with-all-dependencies \
 			maker:* profiler:* debug:* orm-fixtures:* foundry:* symfony/browser-kit:* symfony/http-client:* \
-			mockery/mockery:* nunomaduro/mock-final-classes:* symplify/config-transformer:* tomasvotruba/symfony-config-generator:* rector/rector:* \
+			mockery/mockery:* nunomaduro/mock-final-classes:* rector/rector:* \
 			pestphp/pest:* pestphp/pest-plugin-type-coverage:* pestphp/pest-plugin-faker:*
 
 		if grep -q ^DATABASE_URL= .env; then

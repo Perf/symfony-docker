@@ -1,7 +1,7 @@
-#syntax=docker/dockerfile:1
+#syntax=docker/dockerfile:1.4
 
 # Versions
-FROM dunglas/frankenphp:1-php8.3 AS frankenphp_upstream
+FROM dunglas/frankenphp:1-php8.4 AS frankenphp_upstream
 
 # The different stages of this Dockerfile are meant to be built into separate images
 # https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
@@ -17,20 +17,36 @@ VOLUME /app/var/
 
 # persistent / runtime deps
 # hadolint ignore=DL3008
-RUN apt-get update && apt-get install -y --no-install-recommends \
-	acl \
-	file \
-	gettext \
-	git \
-	&& rm -rf /var/lib/apt/lists/*
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+	--mount=type=cache,target=/var/lib/apt,sharing=locked \
+	set -eux; \
+	apt-get update && apt-get install -y --no-install-recommends \
+		acl \
+		file \
+		gettext \
+		git \
+		unzip \
+		build-essential \
+		libev-dev \
+		libnghttp2-dev \
+		libssl-dev \
+		libpq-dev \
+	;
 
-RUN set -eux; \
+RUN --mount=type=cache,target=/tmp/pear/cache,sharing=locked \
+	--mount=type=cache,target=/tmp/build,sharing=locked \
+	set -eux; \
 	install-php-extensions \
 		@composer \
 		apcu \
 		intl \
 		opcache \
 		zip \
+		pcntl \
+		raphf \
+		ev \
+		pq \
+		pdo_pgsql \
 	;
 
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
@@ -40,7 +56,6 @@ ENV PHP_INI_SCAN_DIR=":$PHP_INI_DIR/app.conf.d"
 
 ###> recipes ###
 ###> doctrine/doctrine-bundle ###
-RUN install-php-extensions pdo_pgsql
 ###< doctrine/doctrine-bundle ###
 ###< recipes ###
 
@@ -53,10 +68,16 @@ ENTRYPOINT ["docker-entrypoint"]
 HEALTHCHECK --start-period=60s CMD curl -f http://localhost:2019/metrics || exit 1
 CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile" ]
 
+RUN set -eux; \
+	git config --global --add safe.directory /app \
+	&& mkdir -p ~/.ssh \
+	&& ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+
 # Dev FrankenPHP image
 FROM frankenphp_base AS frankenphp_dev
 
-ENV APP_ENV=dev XDEBUG_MODE=off
+ENV APP_ENV=dev
+ENV XDEBUG_MODE=off
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
