@@ -27,15 +27,14 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 		git \
 		unzip \
 		build-essential \
+		openssh-client \
 		libev-dev \
 		libnghttp2-dev \
 		libssl-dev \
 		libpq-dev \
 	;
 
-RUN --mount=type=cache,target=/tmp/pear/cache,sharing=locked \
-	--mount=type=cache,target=/tmp/build,sharing=locked \
-	set -eux; \
+RUN set -eux; \
 	install-php-extensions \
 		@composer \
 		apcu \
