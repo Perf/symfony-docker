@@ -1,6 +1,6 @@
 args = $(filter-out $@,$(MAKECMDGOALS))
 export HOST_USER = $(shell id -un)
-export SYMFONY_VERSION=7.1.*
+export SYMFONY_VERSION=7.2.*
 export STABILITY=dev
 
 # Executables (local)
@@ -17,7 +17,7 @@ help: ## Outputs this help screen
 
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 build: ## Builds the Docker images
-	@$(DOCKER_COMP) build --pull --no-cache
+	@$(DOCKER_COMP) build --pull
 
 up: ## Start the Docker containers in detached mode (no logs)
 	@$(DOCKER_COMP) up --detach
