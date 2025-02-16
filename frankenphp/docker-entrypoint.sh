@@ -20,7 +20,7 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		composer config --json extra.symfony.allow-contrib 'true'
 		composer config --json allow-plugins.pestphp/pest-plugin 'true'
 		composer require symfony/flex api log messenger symfony/mailer symfony/uid symfonycasts/micro-mapper nesbot/carbon \
-			amphp/amphp amphp/http-client amphp/log amphp/parallel amphp/postgres revolt/event-loop
+			amphp/amp amphp/http-client amphp/log amphp/parallel amphp/postgres revolt/event-loop
 		composer require --dev --with-all-dependencies \
 			maker:* profiler:* debug:* orm-fixtures:* foundry:* symfony/browser-kit:* symfony/http-client:* \
 			mockery/mockery:* nunomaduro/mock-final-classes:* rector/rector:* \
