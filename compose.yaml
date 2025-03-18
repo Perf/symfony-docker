@@ -12,6 +12,7 @@ services:
         HOST_USER: ${HOST_USER:-${USER:-${LOGNAME}}}
 #    restart: unless-stopped
     environment:
+      APP_ENV: "${APP_ENV:-dev}"
       APP_SECRET: ${APP_SECRET}
       SERVER_NAME: ${SERVER_NAME:-localhost}, php:80
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
