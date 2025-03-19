@@ -14,13 +14,13 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		rm -Rf tmp/
 
 		composer require "php:>=$PHP_VERSION" runtime/frankenphp-symfony \
-			ext-ev ext-json ext-pcntl ext-raphf ext-spl
+			ext-ctype ext-eio ext-ev ext-iconv ext-json ext-pcntl ext-raphf ext-spl
 		composer config --json extra.symfony.allow-risky true
 		composer config --json extra.symfony.docker 'true'
 		composer config --json extra.symfony.allow-contrib 'true'
 		composer config --json allow-plugins.pestphp/pest-plugin 'true'
-		composer require symfony/flex api log messenger symfony/mailer symfony/uid symfonycasts/micro-mapper nesbot/carbon \
-			amphp/amp amphp/http-client amphp/log amphp/parallel amphp/postgres revolt/event-loop
+		composer require symfony/flex api log messenger symfony/doctrine-messenger symfony/mailer symfony/uid symfonycasts/micro-mapper nesbot/carbon \
+			amphp/amp amphp/file amphp/http-client amphp/log amphp/postgres revolt/event-loop zenstruck/messenger-monitor-bundle
 		composer require --dev --with-all-dependencies \
 			maker:* profiler:* debug:* orm-fixtures:* foundry:* symfony/browser-kit:* symfony/http-client:* \
 			mockery/mockery:* nunomaduro/mock-final-classes:* rector/rector:* \
